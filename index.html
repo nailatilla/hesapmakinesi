@@ -1,0 +1,67 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vergi Hesaplama Aracı</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 500px;
+      margin: auto;
+      padding: 20px;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      font-size: 16px;
+    }
+    .sonuc {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #f5f5f5;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+  <h2>Vergi Hesaplama Aracı</h2>
+
+  <label for="kdvDahil">KDV Dahil Tutar:</label>
+  <input type="number" id="kdvDahil" step="0.01" placeholder="Örn: 1200" />
+
+  <button onclick="hesapla()">Hesapla</button>
+
+  <div id="sonuc" class="sonuc"></div>
+
+  <script>
+    function hesapla() {
+      const kdvDahil = parseFloat(document.getElementById("kdvDahil").value);
+      const sonuc = document.getElementById("sonuc");
+
+      if (isNaN(kdvDahil) || kdvDahil <= 0) {
+        sonuc.innerHTML = "<span style='color:red'>Lütfen geçerli bir tutar girin.</span>";
+        return;
+      }
+
+      const kdvOrani = 20;
+      const gelirVergisiOrani = 25;
+
+      const kdvMatrah = kdvDahil / (1 + kdvOrani / 100);
+      const kdvTutari = kdvDahil - kdvMatrah;
+      const gelirVergisi = kdvMatrah * gelirVergisiOrani / 100;
+      const netTutar = kdvMatrah - gelirVergisi;
+
+      sonuc.innerHTML = `
+        <strong>KDV Dahil:</strong> ${kdvDahil.toFixed(2)} TL<br>
+        <strong>KDV Matrahı:</strong> ${kdvMatrah.toFixed(2)} TL<br>
+        <strong>KDV Tutarı:</strong> ${kdvTutari.toFixed(2)} TL<br>
+        <strong>Gelir Vergisi (%25):</strong> ${gelirVergisi.toFixed(2)} TL<br>
+        <strong>Net Tutar:</strong> ${netTutar.toFixed(2)} TL
+      `;
+    }
+  </script>
+</body>
+</html>
